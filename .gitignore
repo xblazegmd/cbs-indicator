@@ -62,3 +62,7 @@ build-*/
 # CLion
 .idea/
 /cmake-build-*/
+
+# Design Files
+*.af
+*.af~lock~

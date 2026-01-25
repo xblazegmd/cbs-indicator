@@ -1,0 +1,14 @@
+{
+	"geode": "5.0.0-alpha.1",
+	"gd": {
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2081",
+		"ios": "2.2074"
+	},
+	"id": "xblazegmd.cbs-indicator",
+	"name": "CBS Indicator",
+	"version": "v1.0.0-alpha.1",
+	"developer": "XblazeGMD",
+	"description": "Make it very obvious when someone's using CBS"
+}

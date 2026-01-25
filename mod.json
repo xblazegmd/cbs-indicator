@@ -10,5 +10,12 @@
 	"name": "CBS Indicator",
 	"version": "v1.0.0-alpha.1",
 	"developer": "XblazeGMD",
-	"description": "Make it very obvious when someone's using CBS"
+	"description": "Make it very obvious when someone's using CBS",
+	"incompatibilities": {
+		"xblazegmd.cbf-indicator": {
+			"importance": "superseded",
+			"version": ">=v1.0.0"
+		}
+	},
+	"tags": ["interface", "enhancement"]
 }

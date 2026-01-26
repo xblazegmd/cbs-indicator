@@ -1,5 +1,3 @@
-#include "Geode/cocos/label_nodes/CCLabelBMFont.h"
-#include "Geode/utils/cocos.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/EndLevelLayer.hpp>

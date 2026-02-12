@@ -8,9 +8,12 @@
 	},
 	"id": "xblazegmd.cbs-indicator",
 	"name": "CBS Indicator",
-	"version": "v1.0.0-alpha.1",
+	"version": "v1.0.0-alpha.2",
 	"developer": "XblazeGMD",
 	"description": "Make it very obvious when someone's using CBS",
+	"dependencies": {
+		"geode.node-ids": ">=v1.20.0"
+	},
 	"incompatibilities": {
 		"xblazegmd.cbf-indicator": {
 			"importance": "superseded",
@@ -22,11 +25,11 @@
 		"source": "https://github.com/xblazegmd/cbs-indicator"
 	},
 	"settings": {
-		"playthrough": {
-			"type": "title",
-			"name": "Playthrough"
-		},
 		"gp-indicator": {
+			"type": "title",
+			"name": "Gameplay Indicator"
+		},
+		"gp-enabled": {
 			"type": "bool",
 			"name": "Show Gameplay Indicator",
 			"description": "Shows an indicator on the top-left (or your desired position) that appears when you're using CBS or CoS",
@@ -34,38 +37,58 @@
 		},
 		"gp-position": {
 			"type": "string",
-			"enable-if": "gp-indicator",
-			"name": "Position",
+			"enable-if": "gp-enabled",
+			"name": "Indicator Position",
 			"description": "The position of the gameplay indicator",
 			"default": "Top-Left",
 			"one-of": ["Top-Left", "Top-Right", "Bottom-Left", "Bottom-Right"]
 		},
 		"gp-opacity": {
 			"type": "int",
-			"enable-if": "gp-indicator",
-			"name": "Opacity",
+			"enable-if": "gp-enabled",
+			"name": "Indicator Opacity",
 			"description": "The opacity of the gameplay indicator (0 -> 255)",
-			"default": 10
+			"default": 10,
+			"min": 0,
+			"max": 255,
+			"control": {
+				"slider": true
+			}
 		},
-		"endscreen": {
+		"end-wm": {
 			"type": "title",
-			"name": "Endscreen"
+			"name": "Endscreen Watermark"
 		},
-		"end-watermark": {
+		"wm-enabled": {
 			"type": "bool",
-			"name": "Show Endscreen Indicator",
-			"description": "Shows a watermark on the top-right (or your desired position) that appears when you're using CBS or CoS\nSimilar to the watermark in the CBF mod",
+			"name": "Show Endscreen Watermark",
+			"description": "Shows a watermark on the top-right (or your desired position) that appears when you're using CBS or CoS.\n\nSimilar to the watermark in the CBF mod.",
 			"default": true
 		},
-		"end-wm-position": {
+		"wm-position": {
 			"type": "string",
-			"enable-if": "end-watermark",
-			"name": "Position",
-			"description": "The position of the endscreen indicator",
+			"enable-if": "wm-enabled",
+			"name": "Watermark Position",
 			"default": "Top-Right",
 			"one-of": ["Top-Left", "Top-Right", "Bottom-Left", "Bottom-Right"]
 		},
-		"end-custom-text": {
+		"wm-opacity": {
+			"type": "int",
+			"enable-if": "wm-enabled",
+			"name": "Watermark Opacity",
+			"description": "The opacity of the watermark (0 -> 255)",
+			"default": 10,
+			"min": 0,
+			"max": 255,
+			"control": {
+				"slider": true
+			}
+		},
+		"end-text": {
+			"type": "title",
+			"name": "Endscreen Text"
+		},
+		"end-text-enabled": {
 			"type": "bool",
 			"name": "Custom Endscreen Text",
 			"description": "Changes the text on the endscreen when using CBS or CoS",
@@ -73,7 +96,7 @@
 		},
 		"end-text-cbs": {
 			"type": "string",
-			"enable-if": "end-custom-text",
+			"enable-if": "end-text-enabled",
 			"filter": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~ ",
 			"name": "CBS Text",
 			"description": "The text that appears when completing a level with CBS",
@@ -81,7 +104,7 @@
 		},
 		"end-text-cos": {
 			"type": "string",
-			"enable-if": "end-custom-text",
+			"enable-if": "end-text-enabled",
 			"filter": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~ ",
 			"name": "CoS Text",
 			"description": "The text that appears when completing a level with CoS",

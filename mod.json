@@ -1,10 +1,10 @@
 {
-	"geode": "5.0.0-alpha.1",
+	"geode": "5.0.0-alpha.2",
 	"gd": {
 		"win": "2.2081",
-		"android": "2.2074",
+		"android": "2.2081",
 		"mac": "2.2081",
-		"ios": "2.2074"
+		"ios": "2.2081"
 	},
 	"id": "xblazegmd.cbs-indicator",
 	"name": "CBS Indicator",
@@ -20,5 +20,72 @@
 	"tags": ["interface", "enhancement"],
 	"links": {
 		"source": "https://github.com/xblazegmd/cbs-indicator"
+	},
+	"settings": {
+		"playthrough": {
+			"type": "title",
+			"name": "Playthrough"
+		},
+		"gp-indicator": {
+			"type": "bool",
+			"name": "Show Gameplay Indicator",
+			"description": "Shows an indicator on the top-left (or your desired position) that appears when you're using CBS or CoS",
+			"default": true
+		},
+		"gp-position": {
+			"type": "string",
+			"enable-if": "gp-indicator",
+			"name": "Position",
+			"description": "The position of the gameplay indicator",
+			"default": "Top-Left",
+			"one-of": ["Top-Left", "Top-Right", "Bottom-Left", "Bottom-Right"]
+		},
+		"gp-opacity": {
+			"type": "int",
+			"enable-if": "gp-indicator",
+			"name": "Opacity",
+			"description": "The opacity of the gameplay indicator (0 -> 255)",
+			"default": 10
+		},
+		"endscreen": {
+			"type": "title",
+			"name": "Endscreen"
+		},
+		"end-watermark": {
+			"type": "bool",
+			"name": "Show Endscreen Indicator",
+			"description": "Shows a watermark on the top-right (or your desired position) that appears when you're using CBS or CoS\nSimilar to the watermark in the CBF mod",
+			"default": true
+		},
+		"end-wm-position": {
+			"type": "string",
+			"enable-if": "end-watermark",
+			"name": "Position",
+			"description": "The position of the endscreen indicator",
+			"default": "Top-Right",
+			"one-of": ["Top-Left", "Top-Right", "Bottom-Left", "Bottom-Right"]
+		},
+		"end-custom-text": {
+			"type": "bool",
+			"name": "Custom Endscreen Text",
+			"description": "Changes the text on the endscreen when using CBS or CoS",
+			"default": true
+		},
+		"end-text-cbs": {
+			"type": "string",
+			"enable-if": "end-custom-text",
+			"filter": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~ ",
+			"name": "CBS Text",
+			"description": "The text that appears when completing a level with CBS",
+			"default": "CBS Detected Loser!"
+		},
+		"end-text-cos": {
+			"type": "string",
+			"enable-if": "end-custom-text",
+			"filter": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~ ",
+			"name": "CoS Text",
+			"description": "The text that appears when completing a level with CoS",
+			"default": "CoS"
+		}
 	}
 }

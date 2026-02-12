@@ -105,23 +105,15 @@ class $modify(CBSEndLevelLayer, EndLevelLayer) {
         if (g_clickOnSteps) completionStr = g_mod->getSettingValue<std::string>("end-text-cos");
         else if (g_clickBetweenSteps) completionStr = g_mod->getSettingValue<std::string>("end-text-cbs");
 
-        // Temporary until NodeIDs works again
-        for (auto child : CCArrayExt<CCNode*>(m_mainLayer->getChildren()))
-            if (auto sprite = typeinfo_cast<CCSprite*>(child))
-                for (auto coinTxt : {
-                    "secretCoinUI_001.png",
-                    "secretCoinUI2_001.png",
-                    "secretCoin_b_01_001.png",
-                    "secretCoin_2_b_01_001.png"
-                }) if (isSpriteFrameName(sprite, coinTxt)) return;
+        auto completeMsg = m_mainLayer->getChildByID("complete-message");
+        if (!completeMsg) return;
 
-        float size = g_clickBetweenSteps ? .7f : .9f;
-        if (auto textArea = m_mainLayer->getChildByType<TextArea>(-1)) {
-            textArea->setString(completionStr);
-            textArea->setScale(size);
-        } else if (auto label = m_mainLayer->getChildByType<CCLabelBMFont>(-1)) {
-            label->setString(completionStr.c_str());
-            label->setScale(size);
-        }
+        if (auto completeMsgArea = typeinfo_cast<TextArea*>(completeMsg)) {
+			completeMsgArea->setString(completionStr);
+			completeMsgArea->setScale(.7f);
+		} else if (auto completeMsgLabel = typeinfo_cast<CCLabelBMFont*>(completeMsg)) {
+			completeMsgLabel->setString(completionStr.c_str());
+			completeMsgLabel->setScale(.7f);
+		}
     }
 };

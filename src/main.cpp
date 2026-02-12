@@ -1,3 +1,4 @@
+#include "Geode/cocos/label_nodes/CCLabelBMFont.h"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/EndLevelLayer.hpp>
@@ -38,16 +39,21 @@ class $modify(CBSPlayLayer, PlayLayer) {
         if (!g_mod->getSettingValue<bool>("gp-enabled")) return true;
 
         // Indicator
-        std::string indText;
+        CCNode* indicator;
+        if (g_mod->getSettingValue<bool>("gp-image")) {
+            indicator = CCSprite::create("cbs-lol.png"_spr); // TODO: Make the size normal
+            static_cast<CCSprite*>(indicator)->setOpacity(g_mod->getSettingValue<int64_t>("gp-opacity"));
+        } else {
+            // Since CBS and CoS can be enabled at the same time
+            std::string indText;
+            if (m_clickOnSteps && !m_clickBetweenSteps) indText = "CoS";
+            else if (m_clickBetweenSteps) indText = "CBS";
 
-        // Since CBS and CoS can be enabled at the same time
-        if (m_clickOnSteps && !m_clickBetweenSteps) indText = "CoS";
-        else if (m_clickBetweenSteps) indText = "CBS";
-
-        auto indicator = CCLabelBMFont::create(indText.c_str(), "bigFont.fnt");
+            indicator = CCLabelBMFont::create(indText.c_str(), "bigFont.fnt");
+            static_cast<CCLabelBMFont*>(indicator)->setOpacity(g_mod->getSettingValue<int64_t>("gp-opacity"));
+        }
         indicator->setVisible(m_clickBetweenSteps || m_clickOnSteps);
-        indicator->setScale(.2f);
-        indicator->setOpacity(g_mod->getSettingValue<int64_t>("gp-opacity"));
+        indicator->setScale(g_mod->getSettingValue<double>("gp-size"));
 
         setPositionBasedOnSetting(indicator, "gp-position");
 
@@ -75,7 +81,7 @@ class $modify(CBSPlayLayer, PlayLayer) {
         // Restore opacity after fade out
         auto indicator = typeinfo_cast<CCLabelBMFont*>(m_uiLayer->getChildByID("indicator"_spr));
         if (!indicator) return;
-        indicator->setOpacity(g_mod->getSettingValue<int64_t>("gp-opacity"));
+        // indicator->setOpacity(g_mod->getSettingValue<int64_t>("gp-opacity"));
     }
 };
 

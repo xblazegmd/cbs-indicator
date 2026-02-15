@@ -39,7 +39,6 @@
 			"type": "string",
 			"enable-if": "gp-enabled",
 			"name": "Indicator Position",
-			"description": "The position of the gameplay indicator",
 			"default": "Top-Left",
 			"one-of": ["Top-Left", "Top-Right", "Bottom-Left", "Bottom-Right"]
 		},
@@ -47,7 +46,7 @@
 			"type": "int",
 			"enable-if": "gp-enabled",
 			"name": "Indicator Opacity",
-			"description": "The opacity of the gameplay indicator (0 -> 255)",
+			"description": "The opacity of the indicator (0 -> 255)",
 			"default": 10,
 			"min": 0,
 			"max": 255,

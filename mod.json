@@ -35,17 +35,11 @@
 			"description": "Shows an indicator on the top-left (or your desired position) that appears when you're using CBS or CoS",
 			"default": true
 		},
-		"gp-image": {
-			"type": "bool",
-			"enable-if": "gp-enabled",
-			"name": "Show Indicator As Image",
-			"description": "Show the indicator as an... interesting image...",
-			"default": false
-		},
 		"gp-position": {
 			"type": "string",
 			"enable-if": "gp-enabled",
 			"name": "Indicator Position",
+			"description": "The position of the gameplay indicator",
 			"default": "Top-Left",
 			"one-of": ["Top-Left", "Top-Right", "Bottom-Left", "Bottom-Right"]
 		},
@@ -53,25 +47,12 @@
 			"type": "int",
 			"enable-if": "gp-enabled",
 			"name": "Indicator Opacity",
-			"description": "The opacity of the indicator (0 -> 255)",
+			"description": "The opacity of the gameplay indicator (0 -> 255)",
 			"default": 10,
 			"min": 0,
 			"max": 255,
 			"control": {
-				"slider": true,
-				"arrows": false
-			}
-		},
-		"gp-size": {
-			"type": "float",
-			"enable-if": "gp-enabled",
-			"name": "Indicator Size",
-			"default": 0.2,
-			"min": 0.1,
-			"max": 2,
-			"control": {
-				"slider": true,
-				"arrows": false
+				"slider": true
 			}
 		},
 		"end-wm": {
@@ -100,8 +81,7 @@
 			"min": 0,
 			"max": 255,
 			"control": {
-				"slider": true,
-				"arrows": false
+				"slider": true
 			}
 		},
 		"end-text": {
@@ -130,10 +110,5 @@
 			"description": "The text that appears when completing a level with CoS",
 			"default": "CoS"
 		}
-	},
-	"resources": {
-		"sprites": [
-			"resources/cbs-lol.png"
-		]
 	}
 }

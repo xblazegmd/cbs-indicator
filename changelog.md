@@ -1,3 +1,2 @@
-# 1.0.0-alpha.1
-### Geode SDK commit 21456fc
+# 1.0.0-beta.1
 - Initial release

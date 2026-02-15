@@ -1,5 +1,5 @@
 {
-	"geode": "5.0.0-alpha.2",
+	"geode": "5.0.0-beta.1",
 	"gd": {
 		"win": "2.2081",
 		"android": "2.2081",
@@ -8,7 +8,7 @@
 	},
 	"id": "xblazegmd.cbs-indicator",
 	"name": "CBS Indicator",
-	"version": "v1.0.0-alpha.2",
+	"version": "v1.0.0-beta.1",
 	"developer": "XblazeGMD",
 	"description": "Make it very obvious when someone's using CBS",
 	"dependencies": {

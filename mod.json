@@ -39,12 +39,14 @@
 			"type": "string",
 			"enable-if": "gp-enabled",
 			"name": "Indicator Position",
+			"enable-if-description": "The indicator is disabled!",
 			"default": "Top-Left",
 			"one-of": ["Top-Left", "Top-Right", "Bottom-Left", "Bottom-Right"]
 		},
 		"gp-opacity": {
 			"type": "int",
 			"enable-if": "gp-enabled",
+			"enable-if-description": "The indicator is disabled!",
 			"name": "Indicator Opacity",
 			"description": "The opacity of the indicator (0 -> 255)",
 			"default": 10,
@@ -67,6 +69,7 @@
 		"wm-position": {
 			"type": "string",
 			"enable-if": "wm-enabled",
+			"enable-if-description": "The watermark is disabled!",
 			"name": "Watermark Position",
 			"default": "Top-Right",
 			"one-of": ["Top-Left", "Top-Right", "Bottom-Left", "Bottom-Right"]
@@ -74,6 +77,7 @@
 		"wm-opacity": {
 			"type": "int",
 			"enable-if": "wm-enabled",
+			"enable-if-description": "The watermark is disabled!",
 			"name": "Watermark Opacity",
 			"description": "The opacity of the watermark (0 -> 255)",
 			"default": 10,
@@ -96,6 +100,7 @@
 		"end-text-cbs": {
 			"type": "string",
 			"enable-if": "end-text-enabled",
+			"enable-if-description": "The custom endscreen text is disabled!",
 			"filter": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~ ",
 			"name": "CBS Text",
 			"description": "The text that appears when completing a level with CBS",
@@ -104,6 +109,7 @@
 		"end-text-cos": {
 			"type": "string",
 			"enable-if": "end-text-enabled",
+			"enable-if-description": "The custom endscreen text is disabled!",
 			"filter": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~ ",
 			"name": "CoS Text",
 			"description": "The text that appears when completing a level with CoS",

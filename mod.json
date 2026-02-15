@@ -14,12 +14,6 @@
 	"dependencies": {
 		"geode.node-ids": ">=v1.20.0"
 	},
-	"incompatibilities": {
-		"xblazegmd.cbf-indicator": {
-			"importance": "superseded",
-			"version": ">=v1.0.0"
-		}
-	},
 	"tags": ["interface", "enhancement"],
 	"links": {
 		"source": "https://github.com/xblazegmd/cbs-indicator"

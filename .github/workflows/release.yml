@@ -20,7 +20,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          name: build-out
+          name: cbs-indicator
           path: build/
 
       - name: Create Release

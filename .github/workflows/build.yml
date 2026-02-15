@@ -54,5 +54,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Build Output
+          name: cbs-indicator
           path: ${{ steps.build.outputs.build-output }}

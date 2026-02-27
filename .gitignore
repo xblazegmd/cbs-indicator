@@ -66,3 +66,4 @@ build-*/
 # Design Files
 *.af
 *.af~lock~
+resources/design

@@ -44,10 +44,17 @@ class $modify(CBSPlayLayer, PlayLayer) {
         if (m_clickOnSteps && !m_clickBetweenSteps) indText = "CoS";
         else if (m_clickBetweenSteps) indText = "CBS";
 
-        auto indicator = CCLabelBMFont::create(indText.c_str(), "bigFont.fnt");
+        int64_t gpOpacity = g_mod->getSettingValue<int64_t>("gp-opacity");
+        CCNode* indicator;
+        if (g_mod->getSettingValue<bool>("gp-image")) {
+            indicator = CCSprite::create("cbs.png"_spr);
+            static_cast<CCSprite*>(indicator)->setOpacity(gpOpacity);
+        } else {
+            indicator = CCLabelBMFont::create(indText.c_str(), "bigFont.fnt");
+            static_cast<CCLabelBMFont*>(indicator)->setOpacity(gpOpacity);
+        }
         indicator->setVisible(m_clickBetweenSteps || m_clickOnSteps);
         indicator->setScale(.2f);
-        indicator->setOpacity(g_mod->getSettingValue<int64_t>("gp-opacity"));
 
         setPositionBasedOnSetting(indicator, "gp-position");
 

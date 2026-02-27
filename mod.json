@@ -18,6 +18,9 @@
 	"links": {
 		"source": "https://github.com/xblazegmd/cbs-indicator"
 	},
+	"resources": {
+		"sprites": ["resources/cbs.png"]
+	},
 	"settings": {
 		"gp-indicator": {
 			"type": "title",
@@ -49,6 +52,14 @@
 			"control": {
 				"slider": true
 			}
+		},
+		"gp-image": {
+			"type": "bool",
+			"enable-if": "gp-enabled",
+			"enable-if-description": "The indicator is disabled!",
+			"name": "Image Indicator",
+			"description": "Show the indicator as an image instead of text",
+			"default": false
 		},
 		"end-wm": {
 			"type": "title",

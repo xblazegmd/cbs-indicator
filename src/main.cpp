@@ -2,6 +2,7 @@
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/EndLevelLayer.hpp>
 
+#include <arc/prelude.hpp>
 #include <cstdint>
 #include <string>
 
@@ -33,6 +34,11 @@ void setPositionBasedOnSetting(CCNode* node, const std::string& setting) {
 }
 
 class $modify(CBSPlayLayer, PlayLayer) {
+    struct Fields {
+        async::TaskHolder<void> m_task;
+        CCNode* m_indicator;
+    };
+
     bool init(GJGameLevel* level, bool useReplay, bool dontCreateObjects) {
         if (!PlayLayer::init(level, useReplay, dontCreateObjects)) return false;
         if (!g_mod->getSettingValue<bool>("gp-enabled")) return true;
@@ -45,24 +51,40 @@ class $modify(CBSPlayLayer, PlayLayer) {
         else if (m_clickBetweenSteps) indText = "CBS";
 
         int64_t gpOpacity = g_mod->getSettingValue<int64_t>("gp-opacity");
-        CCNode* indicator;
         if (g_mod->getSettingValue<bool>("gp-image")) {
-            indicator = CCSprite::create("cbs.png"_spr);
-            static_cast<CCSprite*>(indicator)->setOpacity(gpOpacity);
+            m_fields->m_indicator = CCSprite::create("cbs.png"_spr);
+            static_cast<CCSprite*>(m_fields->m_indicator)->setOpacity(gpOpacity);
         } else {
-            indicator = CCLabelBMFont::create(indText.c_str(), "bigFont.fnt");
-            static_cast<CCLabelBMFont*>(indicator)->setOpacity(gpOpacity);
+            m_fields->m_indicator = CCLabelBMFont::create(indText.c_str(), "bigFont.fnt");
+            static_cast<CCLabelBMFont*>(m_fields->m_indicator)->setOpacity(gpOpacity);
         }
-        indicator->setVisible(m_clickBetweenSteps || m_clickOnSteps);
-        indicator->setScale(.2f);
+        m_fields->m_indicator->setVisible(m_clickBetweenSteps || m_clickOnSteps);
+        m_fields->m_indicator->setScale(.2f);
 
-        setPositionBasedOnSetting(indicator, "gp-position");
+        setPositionBasedOnSetting(m_fields->m_indicator, "gp-position");
 
-        indicator->setID("indicator"_spr);
+        m_fields->m_indicator->setID("indicator"_spr);
+
+        m_fields->m_task.spawn(
+            "listenForCBSToggle"_spr,
+            [this] -> arc::Future<> {
+                while (true) {
+                    m_fields->m_indicator->setVisible(m_clickBetweenSteps || m_clickOnSteps);
+                    if (!g_mod->getSettingValue<bool>("gp-image")) {
+                        std::string indText;
+                        if (m_clickOnSteps && !m_clickBetweenSteps) indText = "CoS";
+                        else if (m_clickBetweenSteps) indText = "CBS";
+                        static_cast<CCLabelBMFont*>(m_fields->m_indicator)->setCString(indText.c_str());
+                    }
+                    co_await arc::sleep(asp::Duration::fromMillis(100));
+                }
+            },
+            [] {}
+        );
 
         /* Add this directly to UILayer here since hooking UILayer
         doesn't work for getting "m_clickBetweenSteps" and "m_clickOnSteps" */
-        m_uiLayer->addChild(indicator);
+        m_uiLayer->addChild(m_fields->m_indicator);
         return true;
     }
 
@@ -72,17 +94,18 @@ class $modify(CBSPlayLayer, PlayLayer) {
         g_clickOnSteps = m_clickOnSteps && !m_clickBetweenSteps; // Handle the "CBS and CoS at the same time" case
 
         // Fade out
-        auto indicator = m_uiLayer->getChildByID("indicator"_spr);
-        if (!indicator) return;
-        indicator->runAction(CCFadeTo::create(.5f, 0));
+        m_fields->m_indicator->runAction(CCFadeTo::create(.5f, 0));
     }
 
     void fullReset() {
         PlayLayer::fullReset();
         // Restore opacity after fade out
-        auto indicator = typeinfo_cast<CCLabelBMFont*>(m_uiLayer->getChildByID("indicator"_spr));
-        if (!indicator) return;
-        indicator->setOpacity(g_mod->getSettingValue<int64_t>("gp-opacity"));
+        int64_t gpOpacity = g_mod->getSettingValue<int64_t>("gp-opacity");
+        if (g_mod->getSettingValue<bool>("gp-image")) {
+            static_cast<CCSprite*>(m_fields->m_indicator)->setOpacity(gpOpacity);
+        } else {
+            static_cast<CCLabelBMFont*>(m_fields->m_indicator)->setOpacity(gpOpacity);
+        }
     }
 };
 

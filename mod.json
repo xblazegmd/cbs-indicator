@@ -58,7 +58,6 @@
 			"enable-if": "gp-enabled",
 			"enable-if-description": "The indicator is disabled!",
 			"name": "Image Indicator",
-			"description": "Show the indicator as an image instead of text",
 			"default": false
 		},
 		"end-wm": {

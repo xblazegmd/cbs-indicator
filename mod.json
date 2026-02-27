@@ -8,7 +8,7 @@
 	},
 	"id": "xblazegmd.cbs-indicator",
 	"name": "CBS Indicator",
-	"version": "v1.0.0-beta.1",
+	"version": "v1.0.0-beta.2",
 	"developer": "XblazeGMD",
 	"description": "Make it very obvious when someone's using CBS",
 	"dependencies": {

@@ -111,6 +111,15 @@
 			"name": "CoS Text",
 			"description": "The text that appears when completing a level with CoS",
 			"default": "CoS"
+		},
+		"end-text-cbf": {
+			"type": "string",
+			"enable-if": "end-text-enabled",
+			"enable-if-description": "The custom endscreen text is disabled!",
+			"filter": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~ ",
+			"name": "CBF Text",
+			"description": "The text that appears when completing a level with CBF (requires the CBF mod to be installed)",
+			"default": "CBF Detected Loser!"
 		}
 	}
 }

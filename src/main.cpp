@@ -123,14 +123,23 @@ class $modify(CBSEndLevelLayer, EndLevelLayer) {
 
         // Custom completion text
         if (Mod::get()->getSettingValue<bool>("end-text-enabled")) {
+            std::string text;
+            if (g_active.value() == "CBF") {
+                text = Mod::get()->getSettingValue<std::string>("end-text-cbf");
+            } else if (g_active.value() == "CBS") {
+                text = Mod::get()->getSettingValue<std::string>("end-text-cbs");
+            } else if (g_active.value() == "CoS") {
+                text = Mod::get()->getSettingValue<std::string>("end-text-cos");
+            }
+
             auto completeMsg = m_mainLayer->getChildByID("complete-message");
             if (!completeMsg) return;
 
             if (auto completeMsgArea = typeinfo_cast<TextArea*>(completeMsg)) {
-			    completeMsgArea->setString(g_active.value());
+			    completeMsgArea->setString(text);
 			    completeMsgArea->setScale(.7f);
 		    } else if (auto completeMsgLabel = typeinfo_cast<CCLabelBMFont*>(completeMsg)) {
-			    completeMsgLabel->setString(g_active.value().c_str());
+			    completeMsgLabel->setString(text.c_str());
 			    completeMsgLabel->setScale(.7f);
 		    }
         }

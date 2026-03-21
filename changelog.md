@@ -1,3 +1,6 @@
+# 1.0.1
+- Fix crash when beating a level
+
 # 1.0.0
 - Bump to Geode v5.3.0
 - Add syzzi's CBF mod support

@@ -81,12 +81,16 @@ class $modify(CBSPlayLayer, PlayLayer) {
     void levelComplete() {
         PlayLayer::levelComplete();
         g_active = getActive();
-        m_fields->m_indicator->runAction(CCFadeTo::create(.5f, 0)); // Fade out
+        if (m_fields->m_indicator) {
+            m_fields->m_indicator->runAction(CCFadeTo::create(.5f, 0)); // Fade out
+        }
     }
 
     void fullReset() {
         PlayLayer::fullReset();
-        m_fields->m_indicator->setOpacity(Mod::get()->getSettingValue<int64_t>("gp-opacity")); // Restore opacity after fade out
+        if (m_fields->m_indicator) {
+            m_fields->m_indicator->setOpacity(Mod::get()->getSettingValue<int64_t>("gp-opacity")); // Restore opacity after fade out
+        }
     }
 
     std::optional<std::string> getActive() {

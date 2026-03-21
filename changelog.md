@@ -1,4 +1,4 @@
-# 1.0.0-beta.3
+# 1.0.0
 - Bump to Geode v5.3.0
 - Add syzzi's CBF mod support
 - Remove image indicator (I didn't rly like it)

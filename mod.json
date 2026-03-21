@@ -53,13 +53,6 @@
 				"slider": true
 			}
 		},
-		"gp-image": {
-			"type": "bool",
-			"enable-if": "gp-enabled",
-			"enable-if-description": "The indicator is disabled!",
-			"name": "Image Indicator",
-			"default": false
-		},
 		"end-wm": {
 			"type": "title",
 			"name": "Endscreen Watermark"

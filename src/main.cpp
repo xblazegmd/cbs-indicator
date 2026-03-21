@@ -12,11 +12,9 @@ using namespace geode::prelude;
 static bool g_clickBetweenSteps = false;
 static bool g_clickOnSteps = false;
 
-static Mod* g_mod = Mod::get();
-
 void setPositionBasedOnSetting(CCNode* node, const std::string& setting) {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
-    std::string alignment = g_mod->getSettingValue<std::string>(setting);
+    std::string alignment = Mod::get()->getSettingValue<std::string>(setting);
 
     if (alignment == "Top-Left") {
         node->setPosition({ 0, winSize.height });
@@ -36,12 +34,12 @@ void setPositionBasedOnSetting(CCNode* node, const std::string& setting) {
 class $modify(CBSPlayLayer, PlayLayer) {
     struct Fields {
         async::TaskHolder<void> m_task;
-        CCNode* m_indicator;
+        CCLabelBMFont* m_indicator;
     };
 
     bool init(GJGameLevel* level, bool useReplay, bool dontCreateObjects) {
         if (!PlayLayer::init(level, useReplay, dontCreateObjects)) return false;
-        if (!g_mod->getSettingValue<bool>("gp-enabled")) return true;
+        if (!Mod::get()->getSettingValue<bool>("gp-enabled")) return true;
 
         // Indicator
         std::string indText;
@@ -50,14 +48,8 @@ class $modify(CBSPlayLayer, PlayLayer) {
         if (m_clickOnSteps && !m_clickBetweenSteps) indText = "CoS";
         else if (m_clickBetweenSteps) indText = "CBS";
 
-        int64_t gpOpacity = g_mod->getSettingValue<int64_t>("gp-opacity");
-        if (g_mod->getSettingValue<bool>("gp-image")) {
-            m_fields->m_indicator = CCSprite::create("cbs.png"_spr);
-            static_cast<CCSprite*>(m_fields->m_indicator)->setOpacity(gpOpacity);
-        } else {
-            m_fields->m_indicator = CCLabelBMFont::create(indText.c_str(), "bigFont.fnt");
-            static_cast<CCLabelBMFont*>(m_fields->m_indicator)->setOpacity(gpOpacity);
-        }
+        m_fields->m_indicator = CCLabelBMFont::create(indText.c_str(), "bigFont.fnt");
+        m_fields->m_indicator->setOpacity(Mod::get()->getSettingValue<int64_t>("gp-opacity"));
         m_fields->m_indicator->setVisible(m_clickBetweenSteps || m_clickOnSteps);
         m_fields->m_indicator->setScale(.2f);
 
@@ -70,13 +62,11 @@ class $modify(CBSPlayLayer, PlayLayer) {
             [this] -> arc::Future<> {
                 while (true) {
                     m_fields->m_indicator->setVisible(m_clickBetweenSteps || m_clickOnSteps);
-                    if (!g_mod->getSettingValue<bool>("gp-image")) {
-                        std::string indText;
-                        if (m_clickOnSteps && !m_clickBetweenSteps) indText = "CoS";
-                        else if (m_clickBetweenSteps) indText = "CBS";
-                        static_cast<CCLabelBMFont*>(m_fields->m_indicator)->setCString(indText.c_str());
-                    }
-                    co_await arc::sleep(asp::Duration::fromMillis(100));
+                    std::string indText;
+                    if (m_clickOnSteps && !m_clickBetweenSteps) indText = "CoS";
+                    else if (m_clickBetweenSteps) indText = "CBS";
+                    m_fields->m_indicator->setCString(indText.c_str());
+                    co_await arc::sleep(asp::Duration::fromMillis(10));
                 }
             },
             [] {}
@@ -99,13 +89,7 @@ class $modify(CBSPlayLayer, PlayLayer) {
 
     void fullReset() {
         PlayLayer::fullReset();
-        // Restore opacity after fade out
-        int64_t gpOpacity = g_mod->getSettingValue<int64_t>("gp-opacity");
-        if (g_mod->getSettingValue<bool>("gp-image")) {
-            static_cast<CCSprite*>(m_fields->m_indicator)->setOpacity(gpOpacity);
-        } else {
-            static_cast<CCLabelBMFont*>(m_fields->m_indicator)->setOpacity(gpOpacity);
-        }
+        m_fields->m_indicator->setOpacity(Mod::get()->getSettingValue<int64_t>("gp-opacity")); // Restore opacity after fade out
     }
 };
 
@@ -120,7 +104,7 @@ class $modify(CBSEndLevelLayer, EndLevelLayer) {
         else if (g_clickBetweenSteps) watermarkText = "CBS";
 
         auto watermark = CCLabelBMFont::create(watermarkText.c_str(), "bigFont.fnt");
-        watermark->setVisible((g_clickBetweenSteps || g_clickOnSteps) && g_mod->getSettingValue<bool>("wm-enabled"));
+        watermark->setVisible((g_clickBetweenSteps || g_clickOnSteps) && Mod::get()->getSettingValue<bool>("wm-enabled"));
         watermark->setScale(.2f);
         watermark->setOpacity(10);
 
@@ -130,10 +114,10 @@ class $modify(CBSEndLevelLayer, EndLevelLayer) {
         this->addChild(watermark);
 
         // Custom completion text
-        if (!g_mod->getSettingValue<bool>("end-text-enabled")) return;
+        if (!Mod::get()->getSettingValue<bool>("end-text-enabled")) return;
         std::string completionStr;
-        if (g_clickOnSteps) completionStr = g_mod->getSettingValue<std::string>("end-text-cos");
-        else if (g_clickBetweenSteps) completionStr = g_mod->getSettingValue<std::string>("end-text-cbs");
+        if (g_clickOnSteps) completionStr = Mod::get()->getSettingValue<std::string>("end-text-cos");
+        else if (g_clickBetweenSteps) completionStr = Mod::get()->getSettingValue<std::string>("end-text-cbs");
 
         auto completeMsg = m_mainLayer->getChildByID("complete-message");
         if (!completeMsg) return;

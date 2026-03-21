@@ -4,13 +4,13 @@
 
 #include <arc/prelude.hpp>
 #include <cstdint>
+#include <optional>
 #include <string>
 
 using namespace geode::prelude;
 
 // For EndLevelLayer
-static bool g_clickBetweenSteps = false;
-static bool g_clickOnSteps = false;
+static std::optional<std::string> g_active = std::nullopt;
 
 void setPositionBasedOnSetting(CCNode* node, const std::string& setting) {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
@@ -43,29 +43,29 @@ class $modify(CBSPlayLayer, PlayLayer) {
 
         // Indicator
         std::string indText;
-
-        // Since CBS and CoS can be enabled at the same time
-        if (m_clickOnSteps && !m_clickBetweenSteps) indText = "CoS";
-        else if (m_clickBetweenSteps) indText = "CBS";
+        auto active = getActive();
+        if (active.has_value()) {
+            indText = active.value();
+        }
 
         m_fields->m_indicator = CCLabelBMFont::create(indText.c_str(), "bigFont.fnt");
         m_fields->m_indicator->setOpacity(Mod::get()->getSettingValue<int64_t>("gp-opacity"));
-        m_fields->m_indicator->setVisible(m_clickBetweenSteps || m_clickOnSteps);
+        m_fields->m_indicator->setVisible(active.has_value()); // If std::nullopt then CBS/CoS are disabled
         m_fields->m_indicator->setScale(.2f);
 
         setPositionBasedOnSetting(m_fields->m_indicator, "gp-position");
-
         m_fields->m_indicator->setID("indicator"_spr);
 
         m_fields->m_task.spawn(
-            "listenForCBSToggle"_spr,
+            "checkForCBSToggle"_spr,
             [this] -> arc::Future<> {
                 while (true) {
-                    m_fields->m_indicator->setVisible(m_clickBetweenSteps || m_clickOnSteps);
-                    std::string indText;
-                    if (m_clickOnSteps && !m_clickBetweenSteps) indText = "CoS";
-                    else if (m_clickBetweenSteps) indText = "CBS";
-                    m_fields->m_indicator->setCString(indText.c_str());
+                    auto active = this->getActive();
+                    m_fields->m_indicator->setVisible(active.has_value());
+                    if (active.has_value()) {
+                        m_fields->m_indicator->setCString(active.value().c_str());
+                    }
+
                     co_await arc::sleep(asp::Duration::fromMillis(10));
                 }
             },
@@ -80,54 +80,55 @@ class $modify(CBSPlayLayer, PlayLayer) {
 
     void levelComplete() {
         PlayLayer::levelComplete();
-        g_clickBetweenSteps = m_clickBetweenSteps;
-        g_clickOnSteps = m_clickOnSteps && !m_clickBetweenSteps; // Handle the "CBS and CoS at the same time" case
-
-        // Fade out
-        m_fields->m_indicator->runAction(CCFadeTo::create(.5f, 0));
+        g_active = getActive();
+        m_fields->m_indicator->runAction(CCFadeTo::create(.5f, 0)); // Fade out
     }
 
     void fullReset() {
         PlayLayer::fullReset();
         m_fields->m_indicator->setOpacity(Mod::get()->getSettingValue<int64_t>("gp-opacity")); // Restore opacity after fade out
     }
+
+    std::optional<std::string> getActive() {
+        if (m_clickBetweenSteps) {
+            return "CBS";
+        } else if (m_clickOnSteps) {
+            return "CoS";
+        }
+        return std::nullopt;
+    }
 };
 
 class $modify(CBSEndLevelLayer, EndLevelLayer) {
     void customSetup() {
         EndLevelLayer::customSetup();
-        if (!g_clickBetweenSteps && !g_clickOnSteps) return;
+        if (!g_active.has_value()) return;
 
         // Watermark
-        std::string watermarkText;
-        if (g_clickOnSteps) watermarkText = "CoS";
-        else if (g_clickBetweenSteps) watermarkText = "CBS";
+        if (Mod::get()->getSettingValue<bool>("wm-enabled")) {
+            // Since at the beginning we exit if g_active is std::nullopt, calling g_active.value() here is safe
+            auto watermark = CCLabelBMFont::create(g_active.value().c_str(), "bigFont.fnt");
+            watermark->setScale(.2f);
+            watermark->setOpacity(10);
 
-        auto watermark = CCLabelBMFont::create(watermarkText.c_str(), "bigFont.fnt");
-        watermark->setVisible((g_clickBetweenSteps || g_clickOnSteps) && Mod::get()->getSettingValue<bool>("wm-enabled"));
-        watermark->setScale(.2f);
-        watermark->setOpacity(10);
+            setPositionBasedOnSetting(watermark, "wm-position");
 
-        setPositionBasedOnSetting(watermark, "wm-position");
-
-        watermark->setID("watermark"_spr);
-        this->addChild(watermark);
+            watermark->setID("watermark"_spr);
+            this->addChild(watermark);
+        }
 
         // Custom completion text
-        if (!Mod::get()->getSettingValue<bool>("end-text-enabled")) return;
-        std::string completionStr;
-        if (g_clickOnSteps) completionStr = Mod::get()->getSettingValue<std::string>("end-text-cos");
-        else if (g_clickBetweenSteps) completionStr = Mod::get()->getSettingValue<std::string>("end-text-cbs");
+        if (Mod::get()->getSettingValue<bool>("end-text-enabled")) {
+            auto completeMsg = m_mainLayer->getChildByID("complete-message");
+            if (!completeMsg) return;
 
-        auto completeMsg = m_mainLayer->getChildByID("complete-message");
-        if (!completeMsg) return;
-
-        if (auto completeMsgArea = typeinfo_cast<TextArea*>(completeMsg)) {
-			completeMsgArea->setString(completionStr);
-			completeMsgArea->setScale(.7f);
-		} else if (auto completeMsgLabel = typeinfo_cast<CCLabelBMFont*>(completeMsg)) {
-			completeMsgLabel->setString(completionStr.c_str());
-			completeMsgLabel->setScale(.7f);
-		}
+            if (auto completeMsgArea = typeinfo_cast<TextArea*>(completeMsg)) {
+			    completeMsgArea->setString(g_active.value());
+			    completeMsgArea->setScale(.7f);
+		    } else if (auto completeMsgLabel = typeinfo_cast<CCLabelBMFont*>(completeMsg)) {
+			    completeMsgLabel->setString(g_active.value().c_str());
+			    completeMsgLabel->setScale(.7f);
+		    }
+        }
     }
 };

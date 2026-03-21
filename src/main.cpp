@@ -90,6 +90,10 @@ class $modify(CBSPlayLayer, PlayLayer) {
     }
 
     std::optional<std::string> getActive() {
+        auto cbf = Loader::get()->getLoadedMod("syzzi.click_between_frames");
+        if (cbf && !cbf->getSettingValue<bool>("soft-toggle")) {
+            return "CBF";
+        }
         if (m_clickBetweenSteps) {
             return "CBS";
         } else if (m_clickOnSteps) {
@@ -104,8 +108,8 @@ class $modify(CBSEndLevelLayer, EndLevelLayer) {
         EndLevelLayer::customSetup();
         if (!g_active.has_value()) return;
 
-        // Watermark
-        if (Mod::get()->getSettingValue<bool>("wm-enabled")) {
+        // Watermark (ignore with CBF since it has a built-in one)
+        if (Mod::get()->getSettingValue<bool>("wm-enabled") && g_active.value() != "CBF") {
             // Since at the beginning we exit if g_active is std::nullopt, calling g_active.value() here is safe
             auto watermark = CCLabelBMFont::create(g_active.value().c_str(), "bigFont.fnt");
             watermark->setScale(.2f);

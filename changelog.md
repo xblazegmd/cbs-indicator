@@ -1,3 +1,6 @@
+# 1.0.2
+- I forgot to make the Watermark Opacity setting work oops
+
 # 1.0.1
 - Fix crash when beating a level
 

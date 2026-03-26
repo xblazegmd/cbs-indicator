@@ -117,7 +117,7 @@ class $modify(CBSEndLevelLayer, EndLevelLayer) {
             // Since at the beginning we exit if g_active is std::nullopt, calling g_active.value() here is safe
             auto watermark = CCLabelBMFont::create(g_active.value().c_str(), "bigFont.fnt");
             watermark->setScale(.2f);
-            watermark->setOpacity(10);
+            watermark->setOpacity(Mod::get()->getSettingValue<int64_t>("wm-opacity"));
 
             setPositionBasedOnSetting(watermark, "wm-position");
 

@@ -1,6 +1,7 @@
 # 1.0.3
 - Add Patreon links
 - Use Xblaze's Geode API
+- *Try* to fix an issue with the custom endscreen text
 
 # 1.0.2
 - I forgot to make the Watermark Opacity setting work oops

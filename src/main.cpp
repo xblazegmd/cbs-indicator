@@ -7,6 +7,8 @@
 #include <optional>
 #include <string>
 
+#include <xblazegmd.geode-api/include/XblazeAPI.hpp>
+
 using namespace geode::prelude;
 
 // For EndLevelLayer
@@ -66,7 +68,7 @@ class $modify(CBSPlayLayer, PlayLayer) {
                         m_fields->m_indicator->setCString(active.value().c_str());
                     }
 
-                    co_await arc::sleep(asp::Duration::fromMillis(10));
+                    co_await xblazeapi::sleepMillis(10);
                 }
             },
             [] {}

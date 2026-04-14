@@ -1,5 +1,6 @@
 # 1.0.3
 - Add Patreon links
+- Use Xblaze's Geode API
 
 # 1.0.2
 - I forgot to make the Watermark Opacity setting work oops

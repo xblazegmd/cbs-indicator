@@ -145,7 +145,7 @@ class $modify(CBSEndLevelLayer, EndLevelLayer) {
 			    completeMsgArea->setString(text);
 			    completeMsgArea->setScale(.7f);
 		    } else if (auto completeMsgLabel = typeinfo_cast<CCLabelBMFont*>(completeMsg)) {
-			    completeMsgLabel->setString(text.c_str());
+			    completeMsgLabel->setCString(text.c_str());
 			    completeMsgLabel->setScale(.7f);
 		    }
         }

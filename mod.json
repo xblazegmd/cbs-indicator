@@ -12,8 +12,7 @@
 	"developer": "XblazeGMD",
 	"description": "Make it very obvious when someone's using CBS",
 	"dependencies": {
-		"geode.node-ids": ">=v1.20.0",
-		"xblazegmd.geode-api": ">=1.0.0"
+		"geode.node-ids": ">=v1.20.0"
 	},
 	"tags": ["interface", "enhancement"],
 	"links": {

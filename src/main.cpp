@@ -7,8 +7,6 @@
 #include <optional>
 #include <string>
 
-#include <xblazegmd.geode-api/include/XblazeAPI.hpp>
-
 using namespace geode::prelude;
 
 // For EndLevelLayer

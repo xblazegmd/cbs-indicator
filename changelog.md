@@ -1,3 +1,6 @@
+# 1.0.4
+- Fix rare crash when exiting a lvl in the right conditions
+
 # 1.0.3
 - Add Patreon links
 - Use Xblaze's Geode API

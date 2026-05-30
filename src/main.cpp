@@ -35,7 +35,6 @@ void setPositionBasedOnSetting(CCNode* node, const std::string& setting) {
 
 class $modify(CBSPlayLayer, PlayLayer) {
     struct Fields {
-        async::TaskHolder<void> m_task;
         CCLabelBMFont* m_indicator;
     };
 
@@ -58,26 +57,20 @@ class $modify(CBSPlayLayer, PlayLayer) {
         setPositionBasedOnSetting(m_fields->m_indicator, "gp-position");
         m_fields->m_indicator->setID("indicator"_spr);
 
-        m_fields->m_task.spawn(
-            "checkForCBSToggle"_spr,
-            [this] -> arc::Future<> {
-                while (true) {
-                    auto active = this->getActive();
-                    m_fields->m_indicator->setVisible(active.has_value());
-                    if (active.has_value()) {
-                        m_fields->m_indicator->setCString(active.value().c_str());
-                    }
-
-                    co_await xblazeapi::sleepMillis(10);
-                }
-            },
-            [] {}
-        );
+        this->schedule(schedule_selector(CBSPlayLayer::updateLabel), 0);
 
         /* Add this directly to UILayer here since hooking UILayer
         doesn't work for getting "m_clickBetweenSteps" and "m_clickOnSteps" */
         m_uiLayer->addChild(m_fields->m_indicator);
         return true;
+    }
+
+    void updateLabel() {
+        auto active = this->getActive();
+        m_fields->m_indicator->setVisible(active.has_value());
+        if (active.has_value()) {
+            m_fields->m_indicator->setCString(active.value().c_str());
+        }
     }
 
     void levelComplete() {

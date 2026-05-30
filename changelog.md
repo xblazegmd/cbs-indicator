@@ -1,5 +1,5 @@
 # 1.0.4
-- Fix rare crash when exiting a lvl in the right conditions
+- Fix rare crash when exiting a lvl
 
 # 1.0.3
 - Add Patreon links

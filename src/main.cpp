@@ -56,15 +56,13 @@ class $modify(CBSPlayLayer, PlayLayer) {
         setPositionBasedOnSetting(m_fields->m_indicator, "gp-position");
         m_fields->m_indicator->setID("indicator"_spr);
 
-        this->schedule(schedule_selector(CBSPlayLayer::updateLabel), 0);
-
         /* Add this directly to UILayer here since hooking UILayer
         doesn't work for getting "m_clickBetweenSteps" and "m_clickOnSteps" */
         m_uiLayer->addChild(m_fields->m_indicator);
         return true;
     }
 
-    void updateLabel(float) {
+    void postUpdate(float) {
         auto active = this->getActive();
         m_fields->m_indicator->setVisible(active.has_value());
         if (active.has_value()) {

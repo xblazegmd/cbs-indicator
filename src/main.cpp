@@ -1,4 +1,5 @@
 #include <Geode/Geode.hpp>
+#include <Geode/ui/Label.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/EndLevelLayer.hpp>
 
@@ -33,7 +34,7 @@ void setPositionBasedOnSetting(CCNode* node, const std::string& setting) {
 
 class $modify(CBSPlayLayer, PlayLayer) {
     struct Fields {
-        CCLabelBMFont* m_indicator;
+        Label* m_indicator;
     };
 
     bool init(GJGameLevel* level, bool useReplay, bool dontCreateObjects) {
@@ -47,7 +48,7 @@ class $modify(CBSPlayLayer, PlayLayer) {
             indText = active.value();
         }
 
-        m_fields->m_indicator = CCLabelBMFont::create(indText.c_str(), "bigFont.fnt");
+        m_fields->m_indicator = Label::create(indText, "bigFont.fnt");
         m_fields->m_indicator->setOpacity(Mod::get()->getSettingValue<int64_t>("gp-opacity"));
         m_fields->m_indicator->setVisible(active.has_value()); // If std::nullopt then CBS/CoS are disabled
         m_fields->m_indicator->setScale(.2f);
@@ -67,7 +68,7 @@ class $modify(CBSPlayLayer, PlayLayer) {
         auto active = this->getActive();
         m_fields->m_indicator->setVisible(active.has_value());
         if (active.has_value()) {
-            m_fields->m_indicator->setCString(active.value().c_str());
+            m_fields->m_indicator->setText(active.value());
         }
     }
 
@@ -108,7 +109,7 @@ class $modify(CBSEndLevelLayer, EndLevelLayer) {
         // Watermark (ignore with CBF since it has a built-in one)
         if (Mod::get()->getSettingValue<bool>("wm-enabled") && g_active.value() != "CBF") {
             // Since at the beginning we exit if g_active is std::nullopt, calling g_active.value() here is safe
-            auto watermark = CCLabelBMFont::create(g_active.value().c_str(), "bigFont.fnt");
+            auto watermark = Label::create(g_active.value(), "bigFont.fnt");
             watermark->setScale(.2f);
             watermark->setOpacity(Mod::get()->getSettingValue<int64_t>("wm-opacity"));
 

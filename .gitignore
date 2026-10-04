@@ -67,3 +67,6 @@ build-*/
 *.af
 *.af~lock~
 resources/design
+
+# Stuff
+compile_commands.json

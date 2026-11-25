@@ -1,4 +1,8 @@
 # CBS Indicator
+## v1.1.1
+- Update to Geode v6
+- Update support links
+
 ## v1.1.0
 - Switch to using `geode::Label` for the indicator/watermark
 - Set default watermark opacity value to 30

@@ -64,10 +64,12 @@ class $modify(CBSPlayLayer, PlayLayer) {
 
     void postUpdate(float dt) {
         PlayLayer::postUpdate(dt);
-        auto active = this->getActive();
-        m_fields->m_indicator->setVisible(active.has_value());
-        if (active.has_value()) {
-            m_fields->m_indicator->setText(active.value());
+        if (m_fields->m_indicator) {
+            auto active = this->getActive();
+            m_fields->m_indicator->setVisible(active.has_value());
+            if (active.has_value()) {
+                m_fields->m_indicator->setText(active.value());
+            }
         }
     }
 

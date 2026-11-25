@@ -1,4 +1,7 @@
 # CBS Indicator
+## v1.1.2
+- Fix crash
+
 ## v1.1.1
 - Update to Geode v6
 - Update support links
